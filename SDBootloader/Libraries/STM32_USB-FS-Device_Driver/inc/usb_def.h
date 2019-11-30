@@ -42,7 +42,7 @@ typedef enum _STANDARD_REQUESTS
   SET_CONFIGURATION,
   GET_INTERFACE,
   SET_INTERFACE,
-  TOTAL_sREQUEST,  /* Total number of Standard request */
+  TOTAL_sREQUEST,       /* Total number of Standard request */
   SYNCH_FRAME = 12
 } STANDARD_REQUESTS;
 

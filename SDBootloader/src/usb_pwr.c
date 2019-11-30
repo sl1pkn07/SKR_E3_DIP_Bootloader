@@ -19,7 +19,7 @@
 #else
  #include "stm32f10x.h"
 #endif /* STM32L1XX_MD */
- 
+
 #include "usb_lib.h"
 #include "usb_conf.h"
 #include "usb_pwr.h"
@@ -55,7 +55,7 @@ RESULT PowerOn(void)
 {
 #ifndef STM32F10X_CL
   uint16_t wRegVal;
-  
+
   /*** cable plugged-in ? ***/
   /*while(!CablePluggedIn());*/
   USB_Cable_Config(ENABLE);
@@ -73,7 +73,7 @@ RESULT PowerOn(void)
   wInterrupt_Mask = CNTR_RESETM | CNTR_SUSPM | CNTR_WKUPM;
   _SetCNTR(wInterrupt_Mask);
 #endif /* STM32F10X_CL */
-  
+
   return USB_SUCCESS;
 }
 
@@ -86,7 +86,7 @@ RESULT PowerOn(void)
 *******************************************************************************/
 RESULT PowerOff()
 {
-#ifndef STM32F10X_CL  
+#ifndef STM32F10X_CL
   /* disable all interrupts and force USB reset */
   _SetCNTR(CNTR_FRES);
   /* clear interrupt status register */
@@ -114,7 +114,7 @@ void Suspend(void)
 
   /* suspend preparation */
   /* ... */
-  
+
 #ifndef STM32F10X_CL
   uint16_t wCNTR;
 
@@ -123,7 +123,7 @@ void Suspend(void)
   wCNTR |= CNTR_FSUSP;
   _SetCNTR(wCNTR);
 #endif /* STM32F10X_CL */
-  
+
   /* ------------------ ONLY WITH BUS-POWERED DEVICES ---------------------- */
   /* power reduction */
   /* ... on connected devices */
@@ -154,13 +154,13 @@ void Resume_Init(void)
   /* ...  */
 #ifndef STM32F10X_CL
   uint16_t wCNTR;
-  
+
   /* CNTR_LPMODE = 0 */
   wCNTR = _GetCNTR();
   wCNTR &= (~CNTR_LPMODE);
   _SetCNTR(wCNTR);
 #endif /* STM32F10X_CL */
-  
+
   /* restore full power */
   /* ... on connected devices */
   Leave_LowPowerMode();
@@ -169,7 +169,7 @@ void Resume_Init(void)
   /* reset FSUSP bit */
   _SetCNTR(IMR_MSK);
 #endif /* STM32F10X_CL */
-  
+
   /* reverse suspend preparation */
   /* ... */
 }
@@ -217,7 +217,7 @@ void Resume(RESUME_STATE eResumeSetVal)
     case RESUME_START:
      #ifdef STM32F10X_CL
       OTGD_FS_SetRemoteWakeup();
-     #else 
+     #else
       wCNTR = _GetCNTR();
       wCNTR |= CNTR_RESUME;
       _SetCNTR(wCNTR);
@@ -226,11 +226,11 @@ void Resume(RESUME_STATE eResumeSetVal)
       ResumeS.bESOFcnt = 10;
       break;
     case RESUME_ON:
-    #ifndef STM32F10X_CL      
+    #ifndef STM32F10X_CL
       ResumeS.bESOFcnt--;
       if (ResumeS.bESOFcnt == 0)
       {
-     #endif /* STM32F10X_CL */    
+     #endif /* STM32F10X_CL */
        #ifdef STM32F10X_CL
         OTGD_FS_ResetRemoteWakeup();
        #else

@@ -51,12 +51,12 @@ typedef struct _USB_OTG_GREGS  //000h
   __IO uint32_t GRXSTSR;      /* Receive Sts Q Read Register        01Ch*/
   __IO uint32_t GRXSTSP;      /* Receive Sts Q Read & POP Register  020h*/
   __IO uint32_t GRXFSIZ;      /* Receive FIFO Size Register         024h*/
-  __IO uint32_t DIEPTXF0;      /* EP0 Tx FIFO Size Register          028h*/
+  __IO uint32_t DIEPTXF0;     /* EP0 Tx FIFO Size Register          028h*/
   __IO uint32_t HNPTXSTS;     /* Non Periodic Tx FIFO/Queue Sts reg 02Ch*/
   uint32_t Reserved30[2];     /* Reserved                           030h*/
   __IO uint32_t GCCFG;        /* General Core configuration reg     038h*/
   __IO uint32_t CID;          /* User ID Register                   03Ch*/
-  uint32_t  reserved[48];          /* Reserved                 040h-0FFh*/
+  uint32_t  reserved[48];     /* Reserved                      040h-0FFh*/
   __IO uint32_t HPTXFSIZ;     /* Host Periodic Tx FIFO Size Reg     100h*/
   __IO uint32_t DIEPTXFx[NUM_TX_FIFOS - 1];        /* dev Transmit FIFO */
 
@@ -162,7 +162,7 @@ uint32_t reserved8_31 :
     24;
   }
   b;
-} 
+}
 USB_OTG_GAHBCFG_TypeDef;
 /******************************************************************************/
 
@@ -496,7 +496,7 @@ uint32_t sgoutnak :
 uint32_t cgoutnak :
     1;
 uint32_t pwronprgdone :
-    1;  
+    1;
 uint32_t reserved :
     20;
   }
@@ -577,11 +577,11 @@ uint32_t setup :   /* for EP0 only */
 uint32_t outtokenepdis :
     1;
 uint32_t reserved5 :
-    1;   
+    1;
 uint32_t b2bsetup :
-    1;      
+    1;
 uint32_t reserved07_31 :
-    25;    
+    25;
   }
   b;
 } USB_OTG_DOEPINTx_TypeDef;
@@ -663,7 +663,7 @@ uint32_t reserved :
     1;
   }
   b;
-} 
+}
 OTG_FS_DEPTSIZx_TypeDef;
 
 /******************************************************************************/

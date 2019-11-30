@@ -20,10 +20,10 @@
 #else
  #include "stm32f10x_it.h"
 #endif /* STM32L1XX_MD */
- 
+
 #include "hw_config.h"
-#if defined(STM32F10X_HD) || defined(STM32F10X_XL) 
- #include "stm32_eval_sdio_sd.h"
+#if defined(STM32F10X_HD) || defined(STM32F10X_XL)
+//#include "stm32_eval_sdio_sd.h"
 #endif /* STM32F10X_HD | STM32F10X_XL*/
 #include "platform_config.h"
 #include "mass_mal.h"
@@ -52,23 +52,23 @@ static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len);
 *******************************************************************************/
 void Set_System(void)
 {
-  /*!< At this stage the microcontroller clock setting is already configured, 
+  /*!< At this stage the microcontroller clock setting is already configured,
        this is done through SystemInit() function which is called from startup
        file (startup_stm32f10x_xx.s) before to branch to application main.
        To reconfigure the default setting of SystemInit() function, refer to
        system_stm32f10x.c file
-     */ 
+     */
 #if defined(USB_USE_EXTERNAL_PULLUP)
   GPIO_InitTypeDef  GPIO_InitStructure;
 #endif /* USB_USE_EXTERNAL_PULLUP */
-  
-#ifdef STM32L1XX_MD 
+
+#ifdef STM32L1XX_MD
   /* Enable the SYSCFG module clock */
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-#endif /* STM32L1XX_MD */ 
-  
-  
-#if !defined (USE_STM3210C_EVAL) && !defined (USE_STM32L152_EVAL)  
+#endif /* STM32L1XX_MD */
+
+
+#if !defined (USE_STM3210C_EVAL) && !defined (USE_STM32L152_EVAL)
   /* Enable and Disconnect Line GPIO clock */
   USB_Disconnect_Config();
 #endif /* USE_STM3210C_EVAL && USE_STM32L152_EVAL */
@@ -83,9 +83,9 @@ void Set_System(void)
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);  
-#endif /* USB_USE_EXTERNAL_PULLUP */  
-  
+  GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);
+#endif /* USB_USE_EXTERNAL_PULLUP */
+
   /* MAL configuration */
   MAL_Config();
 }
@@ -101,17 +101,17 @@ void Set_USBClock(void)
 #ifdef STM32L1XX_MD
   /* Enable USB clock */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
-  
+
 #elif defined(STM32F10X_CL)
   /* Select USBCLK source */
   RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div3);
 
-  /* Enable the USB clock */ 
+  /* Enable the USB clock */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_OTG_FS, ENABLE) ;
 #else
   /* Select USBCLK source */
   RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
-  
+
   /* Enable the USB clock */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
 #endif /* STM32L1XX_MD */
@@ -170,14 +170,14 @@ void USB_Interrupts_Config(void)
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
-  
-#elif defined(STM32F10X_CL) 
+
+#elif defined(STM32F10X_CL)
   NVIC_InitStructure.NVIC_IRQChannel = OTG_FS_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
-  
+
 #else
   NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
@@ -192,14 +192,14 @@ void USB_Interrupts_Config(void)
   NVIC_Init(&NVIC_InitStructure);
 #endif /* STM32F10X_CL */
 
-  
-#if defined(STM32F10X_HD) || defined(STM32F10X_XL)  
-  NVIC_InitStructure.NVIC_IRQChannel = SDIO_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-  NVIC_Init(&NVIC_InitStructure);
-#endif /* STM32L1XX_MD */
-  
+
+//#if defined(STM32F10X_HD) || defined(STM32F10X_XL)
+//  NVIC_InitStructure.NVIC_IRQChannel = SDIO_IRQn;
+//  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+//  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+//  NVIC_Init(&NVIC_InitStructure);
+//#endif /* STM32L1XX_MD */
+
 }
 
 /*******************************************************************************
@@ -281,9 +281,9 @@ void USB_Cable_Config (FunctionalState NewState)
   else
   {
     STM32L15_USB_DISCONNECT;
-  }  
+  }
 
-#elif defined(STM32F10X_CL) 
+#elif defined(STM32F10X_CL)
   if (NewState != DISABLE)
   {
     USB_DevConnect();
@@ -292,8 +292,8 @@ void USB_Cable_Config (FunctionalState NewState)
   {
     USB_DevDisconnect();
   }
-  
-#else 
+
+#else
   if (NewState != DISABLE)
   {
     GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
@@ -320,7 +320,7 @@ void Get_SerialNum(void)
   Device_Serial0 = *(uint32_t*)(0x1FF80050);
   Device_Serial1 = *(uint32_t*)(0x1FF80054);
   Device_Serial2 = *(uint32_t*)(0x1FF80064);
-#else  
+#else
   Device_Serial0 = *(__IO uint32_t*)(0x1FFFF7E8);
   Device_Serial1 = *(__IO uint32_t*)(0x1FFFF7EC);
   Device_Serial2 = *(__IO uint32_t*)(0x1FFFF7F0);
@@ -345,7 +345,7 @@ void Get_SerialNum(void)
 static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len)
 {
   uint8_t idx = 0;
-  
+
   for( idx = 0 ; idx < len ; idx ++)
   {
     if( ((value >> 28)) < 0xA )
@@ -354,11 +354,11 @@ static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len)
     }
     else
     {
-      pbuf[2* idx] = (value >> 28) + 'A' - 10; 
+      pbuf[2* idx] = (value >> 28) + 'A' - 10;
     }
-    
+
     value = value << 4;
-    
+
     pbuf[ 2* idx + 1] = 0;
   }
 }
@@ -373,7 +373,7 @@ void MAL_Config(void)
 {
   MAL_Init(0);
 
-#if defined(STM32F10X_HD) || defined(STM32F10X_XL) 
+#if defined(STM32F10X_HD) || defined(STM32F10X_XL)
   /* Enable the FSMC Clock */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
   MAL_Init(1);
@@ -412,17 +412,17 @@ void USB_Disconnect_Config(void)
 *******************************************************************************/
 void USB_OTG_BSP_uDelay (const uint32_t usec)
 {
-  RCC_ClocksTypeDef  RCC_Clocks;  
+  RCC_ClocksTypeDef  RCC_Clocks;
 
   /* Configure HCLK clock as SysTick clock source */
   SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);
-  
+
   RCC_GetClocksFreq(&RCC_Clocks);
-  
-  SysTick_Config(usec * (RCC_Clocks.HCLK_Frequency / 1000000));  
-  
+
+  SysTick_Config(usec * (RCC_Clocks.HCLK_Frequency / 1000000));
+
   SysTick->CTRL  &= ~SysTick_CTRL_TICKINT_Msk ;
-  
+
   while (!(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk));
 }
 #endif

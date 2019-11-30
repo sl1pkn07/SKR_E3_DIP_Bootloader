@@ -124,7 +124,7 @@ uint8_t MASS_StringSerial[MASS_SIZ_STRING_SERIAL] =
 #ifdef STM32L1XX_MD
     'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, 'L', 0, '1', 0
 #else
-    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, '1', 0, '0', 0      
+    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, '1', 0, '0', 0
 #endif /* STM32L1XX_MD */
   };
 const uint8_t MASS_StringInterface[MASS_SIZ_STRING_INTERFACE] =

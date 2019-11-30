@@ -87,8 +87,8 @@ typedef struct _ENDPOINT_INFO
 
 typedef struct _DEVICE
 {
-  uint8_t Total_Endpoint;     /* Number of endpoints that are used */
-  uint8_t Total_Configuration;/* Number of configuration available */
+  uint8_t Total_Endpoint;           /* Number of endpoints that are used */
+  uint8_t Total_Configuration;      /* Number of configuration available */
 }
 DEVICE;
 
@@ -105,17 +105,17 @@ typedef union
 
 typedef struct _DEVICE_INFO
 {
-  uint8_t USBbmRequestType;       /* bmRequestType */
-  uint8_t USBbRequest;            /* bRequest */
-  uint16_t_uint8_t USBwValues;         /* wValue */
-  uint16_t_uint8_t USBwIndexs;         /* wIndex */
-  uint16_t_uint8_t USBwLengths;        /* wLength */
+  uint8_t USBbmRequestType;         /* bmRequestType */
+  uint8_t USBbRequest;              /* bRequest */
+  uint16_t_uint8_t USBwValues;      /* wValue */
+  uint16_t_uint8_t USBwIndexs;      /* wIndex */
+  uint16_t_uint8_t USBwLengths;     /* wLength */
 
-  uint8_t ControlState;           /* of type CONTROL_STATE */
+  uint8_t ControlState;             /* of type CONTROL_STATE */
   uint8_t Current_Feature;
-  uint8_t Current_Configuration;   /* Selected configuration */
-  uint8_t Current_Interface;       /* Selected interface of current configuration */
-  uint8_t Current_AlternateSetting;/* Selected Alternate Setting of current
+  uint8_t Current_Configuration;    /* Selected configuration */
+  uint8_t Current_Interface;        /* Selected interface of current configuration */
+  uint8_t Current_AlternateSetting; /* Selected Alternate Setting of current
                                      interface*/
 
   ENDPOINT_INFO Ctrl_Info;
@@ -123,8 +123,8 @@ typedef struct _DEVICE_INFO
 
 typedef struct _DEVICE_PROP
 {
-  void (*Init)(void);        /* Initialize the device */
-  void (*Reset)(void);       /* Reset routine of this device */
+  void (*Init)(void);               /* Initialize the device */
+  void (*Reset)(void);              /* Reset routine of this device */
 
   /* Device dependent process after the status stage */
   void (*Process_Status_IN)(void);
@@ -173,10 +173,10 @@ typedef struct _DEVICE_PROP
   uint8_t* (*GetConfigDescriptor)(uint16_t Length);
   uint8_t* (*GetStringDescriptor)(uint16_t Length);
 
-  /* This field is not used in current library version. It is kept only for 
+  /* This field is not used in current library version. It is kept only for
    compatibility with previous versions */
   void* RxEP_buffer;
-   
+
   uint8_t MaxPacketSize;
 
 }DEVICE_PROP;

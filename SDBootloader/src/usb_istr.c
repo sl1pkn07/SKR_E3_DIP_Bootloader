@@ -19,7 +19,7 @@
 #else
  #include "stm32f10x.h"
 #endif /* STM32L1XX_MD */
- 
+
 #include "usb_type.h"
 #include "usb_regs.h"
 #include "usb_pwr.h"
@@ -28,7 +28,7 @@
 #ifndef STM32F10X_CL
  #include "usb_int.h"
 #else
- #include "otgd_fs_int.h" 
+ #include "otgd_fs_int.h"
 #endif /* STM32F10X_CL */
 #include "usb_lib.h"
 
@@ -89,7 +89,7 @@ void USB_Istr(void)
     CTR_Callback();
 #endif
   }
-#endif  
+#endif
   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 #if (IMR_MSK & ISTR_RESET)
   if (wIstr & ISTR_RESET & wInterrupt_Mask)
@@ -201,57 +201,57 @@ u32 STM32_PCD_OTG_ISR_Handler (void)
     gintr_status.d32 = OTGD_FS_ReadCoreItr();
 
    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
-    
+
     /* If there is no interrupt pending exit the interrupt routine */
     if (!gintr_status.d32)
     {
       return 0;
     }
 
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
-    /* Early Suspend interrupt */ 
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    /* Early Suspend interrupt */
 #ifdef INTR_ERLYSUSPEND
     if (gintr_status.b.erlysuspend)
     {
       retval |= OTGD_FS_Handle_EarlySuspend_ISR();
     }
 #endif /* INTR_ERLYSUSPEND */
-    
+
    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* End of Periodic Frame interrupt */
-#ifdef INTR_EOPFRAME    
+#ifdef INTR_EOPFRAME
     if (gintr_status.b.eopframe)
     {
       retval |= OTGD_FS_Handle_EOPF_ISR();
     }
 #endif /* INTR_EOPFRAME */
-    
+
    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Non Periodic Tx FIFO Empty interrupt */
-#ifdef INTR_NPTXFEMPTY    
+#ifdef INTR_NPTXFEMPTY
     if (gintr_status.b.nptxfempty)
     {
       retval |= OTGD_FS_Handle_NPTxFE_ISR();
     }
 #endif /* INTR_NPTXFEMPTY */
-    
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
+
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Wakeup or RemoteWakeup interrupt */
-#ifdef INTR_WKUPINTR    
+#ifdef INTR_WKUPINTR
     if (gintr_status.b.wkupintr)
     {
       /* Update the Resume State machine */
-      Resume(RESUME_EXTERNAL);  
-      
+      Resume(RESUME_EXTERNAL);
+
       retval |= OTGD_FS_Handle_Wakeup_ISR();
     }
-#endif /* INTR_WKUPINTR */   
-    
+#endif /* INTR_WKUPINTR */
+
    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Suspend interrupt */
 #ifdef INTR_USBSUSPEND
     if (gintr_status.b.usbsuspend)
-    { 
+    {
       /* check if SUSPEND is possible */
       if (fSuspendEnabled)
       {
@@ -260,26 +260,26 @@ u32 STM32_PCD_OTG_ISR_Handler (void)
       else
       {
         /* if not possible then resume after xx ms */
-        Resume(RESUME_LATER); /* This case shouldn't happen in OTG Device mode because 
+        Resume(RESUME_LATER); /* This case shouldn't happen in OTG Device mode because
         there's no ESOF interrupt to increment the ResumeS.bESOFcnt in the Resume state machine */
       }
-            
+
       retval |= OTGD_FS_Handle_USBSuspend_ISR();
     }
 #endif /* INTR_USBSUSPEND */
 
    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Start of Frame interrupt */
-#ifdef INTR_SOFINTR    
+#ifdef INTR_SOFINTR
     if (gintr_status.b.sofintr)
     {
       /* Update the frame number variable */
       bIntPackSOF++;
-      
+
       retval |= OTGD_FS_Handle_Sof_ISR();
     }
 #endif /* INTR_SOFINTR */
-    
+
    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Receive FIFO Queue Status Level interrupt */
 #ifdef INTR_RXSTSQLVL
@@ -288,7 +288,7 @@ u32 STM32_PCD_OTG_ISR_Handler (void)
       retval |= OTGD_FS_Handle_RxStatusQueueLevel_ISR();
     }
 #endif /* INTR_RXSTSQLVL */
-    
+
    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Enumeration Done interrupt */
 #ifdef INTR_ENUMDONE
@@ -297,16 +297,16 @@ u32 STM32_PCD_OTG_ISR_Handler (void)
       retval |= OTGD_FS_Handle_EnumDone_ISR();
     }
 #endif /* INTR_ENUMDONE */
-    
+
    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Reset interrupt */
 #ifdef INTR_USBRESET
     if (gintr_status.b.usbreset)
     {
       retval |= OTGD_FS_Handle_UsbReset_ISR();
-    }    
+    }
 #endif /* INTR_USBRESET */
-    
+
    /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* IN Endpoint interrupt */
 #ifdef INTR_INEPINTR
@@ -315,79 +315,79 @@ u32 STM32_PCD_OTG_ISR_Handler (void)
       retval |= OTGD_FS_Handle_InEP_ISR();
     }
 #endif /* INTR_INEPINTR */
-    
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
+
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* OUT Endpoint interrupt */
 #ifdef INTR_OUTEPINTR
     if (gintr_status.b.outepintr)
     {
       retval |= OTGD_FS_Handle_OutEP_ISR();
     }
-#endif /* INTR_OUTEPINTR */    
- 
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
+#endif /* INTR_OUTEPINTR */
+
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Mode Mismatch interrupt */
 #ifdef INTR_MODEMISMATCH
     if (gintr_status.b.modemismatch)
     {
       retval |= OTGD_FS_Handle_ModeMismatch_ISR();
     }
-#endif /* INTR_MODEMISMATCH */  
+#endif /* INTR_MODEMISMATCH */
 
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Global IN Endpoints NAK Effective interrupt */
 #ifdef INTR_GINNAKEFF
     if (gintr_status.b.ginnakeff)
     {
       retval |= OTGD_FS_Handle_GInNakEff_ISR();
     }
-#endif /* INTR_GINNAKEFF */  
+#endif /* INTR_GINNAKEFF */
 
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Global OUT Endpoints NAK effective interrupt */
 #ifdef INTR_GOUTNAKEFF
     if (gintr_status.b.goutnakeff)
     {
       retval |= OTGD_FS_Handle_GOutNakEff_ISR();
     }
-#endif /* INTR_GOUTNAKEFF */  
+#endif /* INTR_GOUTNAKEFF */
 
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Isochronous Out packet Dropped interrupt */
 #ifdef INTR_ISOOUTDROP
     if (gintr_status.b.isooutdrop)
     {
       retval |= OTGD_FS_Handle_IsoOutDrop_ISR();
     }
-#endif /* INTR_ISOOUTDROP */  
+#endif /* INTR_ISOOUTDROP */
 
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Endpoint Mismatch error interrupt */
 #ifdef INTR_EPMISMATCH
     if (gintr_status.b.epmismatch)
     {
       retval |= OTGD_FS_Handle_EPMismatch_ISR();
     }
-#endif /* INTR_EPMISMATCH */  
+#endif /* INTR_EPMISMATCH */
 
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Incomplete Isochronous IN transfer error interrupt */
 #ifdef INTR_INCOMPLISOIN
     if (gintr_status.b.incomplisoin)
     {
       retval |= OTGD_FS_Handle_IncomplIsoIn_ISR();
     }
-#endif /* INTR_INCOMPLISOIN */  
+#endif /* INTR_INCOMPLISOIN */
 
-   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/    
+   /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
     /* Incomplete Isochronous OUT transfer error interrupt */
 #ifdef INTR_INCOMPLISOOUT
     if (gintr_status.b.outepintr)
     {
       retval |= OTGD_FS_Handle_IncomplIsoOut_ISR();
     }
-#endif /* INTR_INCOMPLISOOUT */  
-  
+#endif /* INTR_INCOMPLISOOUT */
+
   }
   return retval;
 }

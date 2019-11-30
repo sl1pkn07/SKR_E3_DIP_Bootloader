@@ -23,7 +23,7 @@
 #else
  #include "stm32f10x.h"
 #endif /* STM32L1XX_MD */
- 
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 #define TXFR_IDLE     0

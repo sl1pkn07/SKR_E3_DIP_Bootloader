@@ -6,108 +6,108 @@ uint32_t UserMemoryMask = 0;
 
 FLASH_RESULT FlashFirmware()
 {
-	/* Get the number of block (4 or 2 pages) from where the user program will be loaded */
-	BlockNbr = (ApplicationAddress - 0x08000000) >> 12;
-	UserMemoryMask = ((uint32_t)~((1 << BlockNbr) - 1));
+    /* Get the number of block (4 or 2 pages) from where the user program will be loaded */
+    BlockNbr = (ApplicationAddress - 0x08000000) >> 12;
+    UserMemoryMask = ((uint32_t)~((1 << BlockNbr) - 1));
 
-	if ((FLASH_GetWriteProtectionOptionByte() & UserMemoryMask) != UserMemoryMask)
-	{
-		FLASH_DisableWriteProtectionPages();
-	}
+    if ((FLASH_GetWriteProtectionOptionByte() & UserMemoryMask) != UserMemoryMask)
+    {
+        FLASH_DisableWriteProtectionPages();
+    }
 
-	FATFS fatfs;
-	FIL file;
-	u8 buffer[1024];
-	UINT btr = 1024;
-	UINT br = 0;
-	UINT index = 0;
+    FATFS fatfs;
+    FIL file;
+    u8 buffer[1024];
+    UINT btr = 1024;
+    UINT br = 0;
+    UINT index = 0;
 
-	FRESULT result = f_mount(0, &fatfs);
+    FRESULT result = f_mount(0, &fatfs);
 
-	if(result == FR_OK)
-	{
-		TCHAR filename[14] = "firmware.bin";
+    if(result == FR_OK)
+    {
+        TCHAR filename[14] = "firmware.bin";
 
-		result = f_open(&file, (TCHAR*)filename, FA_READ);
+        result = f_open(&file, (TCHAR*)filename, FA_READ);
 
-		if(result == FR_OK)
-		{
-			FLASH_Unlock();
-			FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR | FLASH_FLAG_BANK1_PGERR | FLASH_FLAG_BANK1_BSY | FLASH_FLAG_BANK1_EOP | FLASH_FLAG_BANK1_WRPRTERR);
+        if(result == FR_OK)
+        {
+            FLASH_Unlock();
+            FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR | FLASH_FLAG_BANK1_PGERR | FLASH_FLAG_BANK1_BSY | FLASH_FLAG_BANK1_EOP | FLASH_FLAG_BANK1_WRPRTERR);
 
-			FLASH_Status FLASHStatus = FLASH_COMPLETE;
-			uint32_t eraseCounter = 0;
-			uint32_t writeAddress = ApplicationAddress;
-			uint32_t flashValue = 0;
+            FLASH_Status FLASHStatus = FLASH_COMPLETE;
+            uint32_t eraseCounter = 0;
+            uint32_t writeAddress = ApplicationAddress;
+            uint32_t flashValue = 0;
 
-			// Calculate how many flash pages to erase
-			uint32_t pages = FLASH_PagesMask(file.fsize) + 1;
+            // Calculate how many flash pages to erase
+            uint32_t pages = FLASH_PagesMask(file.fsize) + 1;
 
-			// Erase the flash pages
-			for (eraseCounter = 0; (eraseCounter < pages) && (FLASHStatus == FLASH_COMPLETE); eraseCounter++)
-			{
-				FLASHStatus = FLASH_ErasePage(ApplicationAddress + (PAGE_SIZE * eraseCounter));
-			}
+            // Erase the flash pages
+            for (eraseCounter = 0; (eraseCounter < pages) && (FLASHStatus == FLASH_COMPLETE); eraseCounter++)
+            {
+                FLASHStatus = FLASH_ErasePage(ApplicationAddress + (PAGE_SIZE * eraseCounter));
+            }
 
-			do
-			{
-				//Read the data from the file
-				result = f_read(&file, &buffer, btr, &br);
+            do
+            {
+                //Read the data from the file
+                result = f_read(&file, &buffer, btr, &br);
 
-				if(result == FR_OK)
-				{
-					Led1On();
+                if(result == FR_OK)
+                {
+                    Led1On();
 
-					for(index = 0; index < br; index = index + 4)
-					{
-						//Flash Data
-						flashValue = buffer[index + 3] << 24;
-						flashValue += buffer[index + 2] << 16;
-						flashValue += buffer[index + 1] << 8;
-						flashValue += buffer[index];
+                    for(index = 0; index < br; index = index + 4)
+                    {
+                        //Flash Data
+                        flashValue = buffer[index + 3] << 24;
+                        flashValue += buffer[index + 2] << 16;
+                        flashValue += buffer[index + 1] << 8;
+                        flashValue += buffer[index];
 
-						FLASHStatus = FLASH_ProgramWord(writeAddress, flashValue);
+                        FLASHStatus = FLASH_ProgramWord(writeAddress, flashValue);
 
-						if (*(uint32_t*)writeAddress != flashValue)
-						{
-							return FLASH_MEMORY_MISMATCH;
-						}
+                        if (*(uint32_t*)writeAddress != flashValue)
+                        {
+                            return FLASH_MEMORY_MISMATCH;
+                        }
 
-						writeAddress += 4;
-					}
-				}
-				else
-				{
-					return FLASH_DISK_ERR;
-				}
-			}
-			while(br == btr);
+                        writeAddress += 4;
+                    }
+                }
+                else
+                {
+                    return FLASH_DISK_ERR;
+                }
+            }
+            while(br == btr);
 
-			// Close the file
-			result = f_close(&file);
+            // Close the file
+            result = f_close(&file);
 
-			// Delete the file
-			result = f_unlink((TCHAR*)filename);
+            // Delete the file
+            result = f_unlink((TCHAR*)filename);
 
-			Led1Flash(3, 2000);
-		}
-		else
-		{
-			return FLASH_NO_FILE;
-		}
-	}
-	else
-	{
-		return FLASH_NO_SD_CARD;
-	}
+            Led1Flash(3, 2000);
+        }
+        else
+        {
+            return FLASH_NO_FILE;
+        }
+    }
+    else
+    {
+        return FLASH_NO_SD_CARD;
+    }
 
-	return FLASH_OK;
+    return FLASH_OK;
 }
 
 uint32_t CheckFirmware(FIL *file)
 {
 
-	return 1;
+    return 1;
 }
 
 uint32_t FLASH_PagesMask(__IO uint32_t Size)

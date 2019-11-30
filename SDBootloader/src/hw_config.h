@@ -23,7 +23,6 @@
 #else
  #include "stm32f10x.h"
 #endif /* STM32L1XX_MD */
- 
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -45,9 +44,9 @@ void USB_NotConfigured_LED(void);
 void USB_Cable_Config (FunctionalState NewState);
 void Get_SerialNum(void);
 void MAL_Config(void);
-//#if defined (USE_STM3210B_EVAL) || defined (USE_STM3210E_EVAL)
+#if defined (USE_STM3210B_EVAL) || defined (USE_STM3210E_EVAL)
 void USB_Disconnect_Config(void);
-//#endif /* USE_STM3210B_EVAL or USE_STM3210E_EVAL */
+#endif /* USE_STM3210B_EVAL or USE_STM3210E_EVAL */
 /* External variables --------------------------------------------------------*/
 
 #endif  /*__HW_CONFIG_H*/

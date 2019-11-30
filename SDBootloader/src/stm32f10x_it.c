@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F10x_StdPeriph_Template/stm32f10x_it.c 
+  * @file    Project/STM32F10x_StdPeriph_Template/stm32f10x_it.c
   * @author  MCD Application Team
   * @version V3.5.0
   * @date    08-April-2011
   * @brief   Main Interrupt Service Routines.
-  *          This file provides template for all exceptions handler and 
+  *          This file provides template for all exceptions handler and
   *          peripherals interrupt service routine.
   ******************************************************************************
   * @attention
@@ -133,21 +133,21 @@ void PendSV_Handler(void)
 
 void TIM3_IRQHandler(void)
 {
-	if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
-	{
-		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-		disk_timerproc();
-	}
+    if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
+    {
+        TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+        disk_timerproc();
+    }
 }
 
 void USB_HP_CAN1_TX_IRQHandler(void)
 {
-	CTR_HP();
+    CTR_HP();
 }
 
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
-	USB_Istr();
+    USB_Istr();
 }
 
 /**
@@ -177,7 +177,7 @@ void SysTick_Handler(void)
 
 /**
   * @}
-  */ 
+  */
 
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

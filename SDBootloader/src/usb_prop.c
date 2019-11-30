@@ -34,7 +34,7 @@
 #elif defined (USE_STM3210C_EVAL)
  uint32_t Max_Lun = 0;
 #elif defined (USE_STM32L152_EVAL)
- uint32_t Max_Lun = 0; 
+ uint32_t Max_Lun = 0;
 #endif
 
 DEVICE Device_Table =
@@ -139,17 +139,17 @@ void MASS_Reset()
   /* Current Feature initialization */
   pInformation->Current_Feature = MASS_ConfigDescriptor[7];
 
-#ifdef STM32F10X_CL   
-  
+#ifdef STM32F10X_CL
+
   /* EP0 is already configured by USB_SIL_Init() function */
 
   /* Init EP1 IN as Bulk endpoint */
   OTG_DEV_EP_Init(EP1_IN, OTG_DEV_EP_TYPE_BULK, BULK_MAX_PACKET_SIZE);
-  
+
   /* Init EP2 OUT as Bulk endpoint */
-  OTG_DEV_EP_Init(EP2_OUT, OTG_DEV_EP_TYPE_BULK, BULK_MAX_PACKET_SIZE); 
-  
-#else 
+  OTG_DEV_EP_Init(EP2_OUT, OTG_DEV_EP_TYPE_BULK, BULK_MAX_PACKET_SIZE);
+
+#else
 
   SetBTABLE(BTABLE_ADDRESS);
 
@@ -205,13 +205,13 @@ void Mass_Storage_SetConfiguration(void)
     /* Device configured */
     bDeviceState = CONFIGURED;
 
-#ifdef STM32F10X_CL 
+#ifdef STM32F10X_CL
     /* Init EP1 IN as Bulk endpoint */
     OTG_DEV_EP_Init(EP1_IN, OTG_DEV_EP_TYPE_BULK, BULK_MAX_PACKET_SIZE);
-  
+
     /* Init EP2 OUT as Bulk endpoint */
-    OTG_DEV_EP_Init(EP2_OUT, OTG_DEV_EP_TYPE_BULK, BULK_MAX_PACKET_SIZE);     
-#else    
+    OTG_DEV_EP_Init(EP2_OUT, OTG_DEV_EP_TYPE_BULK, BULK_MAX_PACKET_SIZE);
+#else
     ClearDTOG_TX(ENDP1);
     ClearDTOG_RX(ENDP2);
 #endif /* STM32F10X_CL */
@@ -319,12 +319,12 @@ RESULT MASS_NoData_Setup(uint8_t RequestNo)
       && (RequestNo == MASS_STORAGE_RESET) && (pInformation->USBwValue == 0)
       && (pInformation->USBwIndex == 0) && (pInformation->USBwLength == 0x00))
   {
-   #ifdef STM32F10X_CL 
+   #ifdef STM32F10X_CL
     /* Init EP1 IN as Bulk endpoint */
     OTG_DEV_EP_Init(EP1_IN, OTG_DEV_EP_TYPE_BULK, BULK_MAX_PACKET_SIZE);
-  
+
     /* Init EP2 OUT as Bulk endpoint */
-    OTG_DEV_EP_Init(EP2_OUT, OTG_DEV_EP_TYPE_BULK, BULK_MAX_PACKET_SIZE);     
+    OTG_DEV_EP_Init(EP2_OUT, OTG_DEV_EP_TYPE_BULK, BULK_MAX_PACKET_SIZE);
    #else
     /* Initialize Endpoint 1 */
     ClearDTOG_TX(ENDP1);

@@ -78,7 +78,7 @@ void Mass_Storage_In (void)
       if (GetEPRxStatus(EP2_OUT) == EP_RX_STALL)
       {
         SetEPRxStatus(EP2_OUT, EP_RX_VALID);/* enable the Endpoint to receive the next cmd*/
-      }      
+      }
     #endif /* STM32F10X_CL */
       break;
 
@@ -284,7 +284,7 @@ void Transfer_Data_Request(uint8_t* Data_Pointer, uint16_t Data_Len)
 
 #ifndef USE_STM3210C_EVAL
     SetEPTxStatus(ENDP1, EP_TX_VALID);
-#endif  
+#endif
   Bot_State = BOT_DATA_IN_LAST;
   CSW.dDataResidue -= Data_Len;
   CSW.bStatus = CSW_CMD_PASSED;
@@ -311,7 +311,7 @@ void Set_CSW (uint8_t CSW_Status, uint8_t Send_Permission)
     Bot_State = BOT_CSW_Send;
 #ifndef USE_STM3210C_EVAL
     SetEPTxStatus(ENDP1, EP_TX_VALID);
-#endif  
+#endif
   }
 
 }

@@ -7,11 +7,11 @@
 
 /* Private typedef */
 typedef enum {
-	FLASH_OK = 0,				/* (0) Succeeded */
-	FLASH_NO_SD_CARD,			/* (1) No SD Card Inserted */
-	FLASH_NO_FILE,				/* (2) No New firmware.bin file */
-	FLASH_DISK_ERR,				/* (3) Error reading firmware from sd card */
-	FLASH_MEMORY_MISMATCH		/* (4) Flashed Memory does not match value */
+    FLASH_OK = 0,                   /* (0) Succeeded */
+    FLASH_NO_SD_CARD,               /* (1) No SD Card Inserted */
+    FLASH_NO_FILE,                  /* (2) No New firmware.bin file */
+    FLASH_DISK_ERR,                 /* (3) Error reading firmware from sd card */
+    FLASH_MEMORY_MISMATCH           /* (4) Flashed Memory does not match value */
 } FLASH_RESULT;
 
 uint32_t CheckFirmware(FIL *file);

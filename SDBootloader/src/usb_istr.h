@@ -89,8 +89,8 @@ void ESOF_Callback(void);
 /* Interrupt subroutines user callbacks prototypes.
    These callbacks are called into the respective interrupt subroutine functions
    and can be tailored for various user application purposes.
-     Note: Make sure that the correspondent interrupt is enabled through the 
-     definition in usb_conf.h file */ 
+     Note: Make sure that the correspondent interrupt is enabled through the
+     definition in usb_conf.h file */
 void INTR_MODEMISMATCH_Callback(void);
 void INTR_SOFINTR_Callback(void);
 void INTR_RXSTSQLVL_Callback(void);
@@ -111,7 +111,7 @@ void INTR_INCOMPLISOOUT_Callback(void);
 void INTR_WKUPINTR_Callback(void);
 
 /* Isochronous data update */
-void INTR_RXSTSQLVL_ISODU_Callback(void); 
+void INTR_RXSTSQLVL_ISODU_Callback(void);
 
 #endif /* STM32F10X_CL */
 

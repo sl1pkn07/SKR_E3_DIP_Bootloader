@@ -91,7 +91,7 @@ void Read_Memory(uint8_t lun, uint32_t Memory_Offset, uint32_t Transfer_Length)
     SetEPTxCount(ENDP1, BULK_MAX_PACKET_SIZE);
 #ifndef USE_STM3210C_EVAL
     SetEPTxStatus(ENDP1, EP_TX_VALID);
-#endif    
+#endif
     Offset += BULK_MAX_PACKET_SIZE;
     Length -= BULK_MAX_PACKET_SIZE;
 
@@ -152,7 +152,7 @@ void Write_Memory (uint8_t lun, uint32_t Memory_Offset, uint32_t Transfer_Length
 
     CSW.dDataResidue -= Data_Len;
   #ifndef STM32F10X_CL
-    SetEPRxStatus(ENDP2, EP_RX_VALID); /* enable the next transaction*/   
+    SetEPRxStatus(ENDP2, EP_RX_VALID); /* enable the next transaction*/
   #endif /* STM32F10X_CL */
 
     Led_RW_ON();

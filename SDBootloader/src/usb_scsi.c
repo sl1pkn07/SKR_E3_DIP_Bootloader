@@ -24,7 +24,7 @@
 #include "usb_lib.h"
 
 #ifdef USE_STM3210E_EVAL
- #include "nand_if.h"
+  #include "nand_if.h"
 #endif /* USE_STM3210E_EVAL */
 
 /* Private typedef -----------------------------------------------------------*/

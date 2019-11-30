@@ -23,7 +23,7 @@
 #else
  #include "stm32f10x.h"
 #endif /* STM32L1XX_MD */
- 
+
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -39,34 +39,34 @@
 /* Define the STM32F10x hardware depending on the used evaluation board */
 #ifdef USE_STM3210B_EVAL
 
-  #define USB_DISCONNECT                    GPIOD  
-  #define USB_DISCONNECT_PIN                GPIO_Pin_2
-  #define RCC_APB2Periph_GPIO_DISCONNECT    RCC_APB2Periph_GPIOD
+  #define USB_DISCONNECT                    GPIOC
+  #define USB_DISCONNECT_PIN                GPIO_Pin_13
+  #define RCC_APB2Periph_GPIO_DISCONNECT    RCC_APB2Periph_GPIOC
 
 #elif defined (USE_STM3210E_EVAL)
 
-  #define USB_DISCONNECT                    GPIOB  
+  #define USB_DISCONNECT                    GPIOB
   #define USB_DISCONNECT_PIN                GPIO_Pin_14
   #define RCC_APB2Periph_GPIO_DISCONNECT    RCC_APB2Periph_GPIOB
 
 #elif defined (USE_STM3210C_EVAL)
 
-  #define USB_DISCONNECT                    0  
+  #define USB_DISCONNECT                    0
   #define USB_DISCONNECT_PIN                0
   #define RCC_APB2Periph_GPIO_DISCONNECT    0
 
 #elif defined (USE_STM32L152_EVAL)
- /* 
+ /*
    For STM32L15xx devices it is possible to use the internal USB pullup
    controlled by register SYSCFG_PMC (refer to RM0038 reference manual for
    more details).
    It is also possible to use external pullup (and disable the internal pullup)
    by setting the define USB_USE_EXTERNAL_PULLUP in file platform_config.h
    and configuring the right pin to be used for the external pull up configuration.
-   To have more details on how to use an external pull up, please refer to 
+   To have more details on how to use an external pull up, please refer to
    STM3210E-EVAL evaluation board manuals.
    */
- /* Uncomment the following define to use an external pull up instead of the 
+ /* Uncomment the following define to use an external pull up instead of the
     integrated STM32L15xx internal pull up. In this case make sure to set up
     correctly the external required hardware and the GPIO defines below.*/
 /* #define USB_USE_EXTERNAL_PULLUP */
@@ -77,7 +77,7 @@
 
  #elif defined(USB_USE_EXTERNAL_PULLUP)
   /* PA0 is chosen just as illustrating example, you should modify the defines
-    below according to your hardware configuration. */ 
+    below according to your hardware configuration. */
   #define USB_DISCONNECT                      GPIOA
   #define USB_DISCONNECT_PIN                  GPIO_Pin_0
   #define RCC_AHBPeriph_GPIO_DISCONNECT       RCC_AHBPeriph_GPIOA
