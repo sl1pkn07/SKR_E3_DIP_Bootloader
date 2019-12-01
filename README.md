@@ -13,4 +13,4 @@ RET6 -> https://www.st.com/en/microcontrollers-microprocessors/stm32f103re.html
 
 # STATUS
 Build: OK</br>
-Works: NOK :(
+Works: MAYBE?
